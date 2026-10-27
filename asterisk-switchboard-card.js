@@ -131,9 +131,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
                 </span>
               </div>
               <div class="state-row"><span class="state-pill ${info.tone}">${this._escape(info.label)}</span></div>
-              <div class="tile-actions">
-                <button class="details" data-entity="${this._escape(item.stateId || item.registeredId)}">View details <span>↗</span></button>
-              </div>
             </article>`;
         }).join("")
       : `<div class="empty">No Asterisk extension entities found.<br><span>Check that the integration is loaded and its Registered entities are enabled.</span></div>`;
@@ -193,10 +190,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
         .state-pill.ringing { color:var(--warning-color,#e5a000); background:color-mix(in srgb,var(--warning-color,#e5a000) 14%,transparent); }
         .state-pill.busy,.state-pill.hold { color:var(--error-color,#db4437); background:color-mix(in srgb,var(--error-color,#db4437) 12%,transparent); }
         .state-pill.offline { color:var(--secondary-text-color); }
-        .tile-actions { margin-top:10px; padding-top:9px; border-top:1px solid var(--divider-color); }
-        button.details { width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; padding:0;
-          border:0; background:transparent; color:var(--primary-color); font:inherit; font-size:12px; text-align:left; cursor:pointer; }
-        button.details:focus-visible { outline:2px solid var(--primary-color); outline-offset:3px; border-radius:3px; }
         .empty { grid-column:1/-1; padding:22px 12px; border:1px dashed var(--divider-color); border-radius:10px; text-align:center; color:var(--secondary-text-color); font-size:13px; line-height:1.6; }
         .empty span { font-size:12px; }
         .footer { margin-top:14px; padding-top:10px; border-top:1px solid var(--divider-color); color:var(--secondary-text-color); font-size:11px; display:flex; justify-content:space-between; gap:8px; }
@@ -230,15 +223,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
         <div class="footer"><span>${amiConnected ? "Asterisk Manager Interface online" : "Check the Asterisk AMI connection"}</span><span>${extensions.length} detected</span></div>
       </div></ha-card>`;
 
-    this.shadowRoot.querySelectorAll("button.details").forEach((button) => {
-      button.addEventListener("click", () => {
-        const entityId = button.dataset.entity;
-        if (!entityId) return;
-        this.dispatchEvent(new CustomEvent("hass-more-info", {
-          bubbles: true, composed: true, detail: { entityId },
-        }));
-      });
-    });
   }
 
   static getConfigElement() { return document.createElement("asterisk-switchboard-card-editor"); }
