@@ -5,7 +5,7 @@ A clean, responsive Lovelace switchboard for the [TECH7Fox Asterisk integration]
 ## Features
 
 - AMI connection status from `binary_sensor.ami_connected`
-- Automatically discovers extension registration entities and matches state/connected-line sensors
+- Automatically discovers extension registration entities and matches state sensors
 - Supports simple and prefixed Asterisk entity naming patterns
 - Live counts for available, ringing, in-use, and unavailable extensions
 - Responsive extension tiles, friendly labels, and no extra frontend dependencies
@@ -34,8 +34,11 @@ show_unregistered: true
 extensions:
   "202": Reception
   "203": Office
+exclude_extensions:
+  - "201"
+  - "204"
 ```
 
-Options: `title` sets the heading, `ami_entity` sets the AMI connectivity entity, `columns` controls desktop columns (1–6), `show_unregistered` hides offline extensions when false, and `extensions` maps extension numbers/entity bases to friendly labels.
+Options: `title` sets the heading, `ami_entity` sets the AMI connectivity entity, `columns` controls desktop columns (1–6), `show_unregistered` hides offline extensions when false, `extensions` maps extension numbers or entity bases to custom display labels, and `exclude_extensions` is a list of extension numbers or entity bases to omit from the card. Extension labels fall back to `Extension <number>` when not configured. For example, `extensions: { "202": Reception }` changes extension 202’s label, while `exclude_extensions: ["201", "pjsip_204_204"]` hides extensions 201 and 204.
 
 The card displays status and opens an entity's More Info panel. It does not initiate, transfer, or hang up calls.
