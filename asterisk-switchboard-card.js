@@ -16,6 +16,7 @@ class AsteriskSwitchboardCard extends HTMLElement {
       columns: 3,
       show_unregistered: true,
       extensions: {},
+      exclude_extensions: [],
       ...config,
     };
     this._render();
@@ -66,7 +67,10 @@ class AsteriskSwitchboardCard extends HTMLElement {
       if (!previous || (candidateIsSimple && !previousIsSimple)) found.set(extension, candidate);
     }
 
+    const excluded = new Set((this._config.exclude_extensions || []).map((value) => String(value).trim()));
+
     return [...found.values()]
+      .filter((item) => !excluded.has(item.extension) && !excluded.has(item.entityBase))
       .filter((item) => this._config.show_unregistered !== false || item.registered)
       .sort((a, b) => a.extension.localeCompare(b.extension, undefined, { numeric: true }));
   }
