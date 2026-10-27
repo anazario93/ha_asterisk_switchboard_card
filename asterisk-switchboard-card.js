@@ -51,18 +51,14 @@ class AsteriskSwitchboardCard extends HTMLElement {
       if (!numberMatch) continue;
       const extension = numberMatch[1];
       const stateId = `sensor.${entityBase}_state`;
-      const lineId = `sensor.${entityBase}_connected_line`;
       const registeredState = entities[registeredId];
       const stateEntity = entities[stateId];
-      const lineEntity = entities[lineId];
 
       const candidate = {
         extension, entityBase, registeredId,
         stateId: entities[stateId] ? stateId : null,
-        lineId: entities[lineId] ? lineId : null,
         registered: registeredState?.state === "on",
         state: stateEntity?.state ?? "Unknown",
-        line: lineEntity?.state ?? "None",
       };
       const previous = found.get(extension);
       const candidateIsSimple = entityBase === extension;
@@ -117,9 +113,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
       ? extensions.map((item) => {
           const info = this._stateInfo(item.state, item.registered);
           const name = this._friendlyName(item.extension, item.entityBase);
-          const line = item.line && item.line !== "None" && item.line !== "unknown" && item.line !== "unavailable"
-            ? `Connected line · ${this._escape(item.line)}`
-            : "No active connected line";
           return `
             <article class="extension ${info.tone}">
               <div class="tile-top">
@@ -133,7 +126,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
                 </span>
               </div>
               <div class="state-row"><span class="state-pill ${info.tone}">${this._escape(info.label)}</span></div>
-              <div class="line">${line}</div>
               <div class="tile-actions">
                 <button class="details" data-entity="${this._escape(item.stateId || item.registeredId)}">View details <span>↗</span></button>
               </div>
@@ -196,7 +188,6 @@ class AsteriskSwitchboardCard extends HTMLElement {
         .state-pill.ringing { color:var(--warning-color,#e5a000); background:color-mix(in srgb,var(--warning-color,#e5a000) 14%,transparent); }
         .state-pill.busy,.state-pill.hold { color:var(--error-color,#db4437); background:color-mix(in srgb,var(--error-color,#db4437) 12%,transparent); }
         .state-pill.offline { color:var(--secondary-text-color); }
-        .line { margin-top:10px; min-height:16px; font-size:11px; line-height:1.4; color:var(--secondary-text-color); overflow-wrap:anywhere; }
         .tile-actions { margin-top:10px; padding-top:9px; border-top:1px solid var(--divider-color); }
         button.details { width:100%; display:flex; justify-content:space-between; align-items:center; gap:8px; padding:0;
           border:0; background:transparent; color:var(--primary-color); font:inherit; font-size:12px; text-align:left; cursor:pointer; }
