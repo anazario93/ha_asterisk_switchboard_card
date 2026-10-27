@@ -1,0 +1,13 @@
+{
+  "name": "ha-asterisk-switchboard-card",
+  "version": "1.0.0",
+  "description": "A responsive Lovelace switchboard card for the TECH7Fox Asterisk Home Assistant integration",
+  "main": "asterisk-switchboard-card.js",
+  "license": "MIT",
+  "keywords": [
+    "home-assistant",
+    "lovelace",
+    "asterisk",
+    "custom-card"
+  ]
+}
