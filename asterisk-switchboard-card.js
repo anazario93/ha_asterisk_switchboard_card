@@ -75,9 +75,10 @@ class AsteriskSwitchboardCard extends HTMLElement {
     const normalized = String(state || "Unknown").toLowerCase();
     if (!registered) return { label: "Not registered", tone: "offline", icon: "mdi:phone-off" };
     if (normalized.includes("ring")) return { label: state, tone: "ringing", icon: "mdi:phone-ring" };
+    // Check "not in use" before "in use", since the former contains the latter.
+    if (normalized.includes("not in use") || normalized === "idle") return { label: "Available", tone: "available", icon: "mdi:phone" };
     if (normalized.includes("busy") || normalized.includes("in use")) return { label: state, tone: "busy", icon: "mdi:phone-in-talk" };
     if (normalized.includes("hold")) return { label: state, tone: "hold", icon: "mdi:phone-paused" };
-    if (normalized.includes("not in use")) return { label: "Available", tone: "available", icon: "mdi:phone" };
     if (normalized.includes("unavailable") || normalized === "unknown") return { label: state, tone: "offline", icon: "mdi:phone-off" };
     return { label: state, tone: "neutral", icon: "mdi:phone" };
   }
